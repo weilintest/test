@@ -70,7 +70,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /home/$USERNAME
 
-COPY ./Tools   /home/$USERNAME/Tools/
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	gcc \
