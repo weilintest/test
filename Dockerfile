@@ -22,60 +22,12 @@ RUN mkdir /etc/sudoers.d && \
         chmod 0440 /etc/sudoers.d/$USERNAME
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-	apt-utils \
 	git-core \
 	wget \
 	net-tools \
-	inetutils-ping \
-	htop \
- 	cmake-curses-gui \
-        cmake-qt-gui \
-        dbus-x11 \
-        dmz-cursor-theme \
-        fonts-dejavu \
-        gconf2 \
-        gnome-terminal \
-        gosu \
-        language-pack-en \
-        libarmadillo-dev \
-        libcanberra-gtk-module \
-        libcanberra-gtk3-0 \
-        libcanberra-gtk3-module \
-        libdbus-glib-1-2 \
-        libgflags-dev \
-        libglew-dev \
-        libgoogle-glog-dev \
-        libgoogle-perftools-dev \
-        libgsl0-dev \
-        libmosquitto-dev \
-        libopenni2-dev \
-        libpcap-dev \
-        libssh2-1-dev \
-        locales \
-        pulseaudio \
-        python3-colcon-common-extensions \
-        python3-pip \
-        python3-setuptools \
-        python3-vcstool \
-        sudo \
-        tmux \
-        vim \
-	gedit \
-	cmake \
-	libacl1-dev \
-	libncurses5-dev \
-	pkg-config &&\
-        pip3 install -U setuptools && \
-        rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /home/$USERNAME
-
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	gcc \
-	make \
-	build-essential \
-	ros-foxy-demo-nodes-py
 
 
 
