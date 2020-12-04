@@ -24,7 +24,7 @@ RUN mkdir /etc/sudoers.d && \
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	git-core \
 	wget \
-	net-tools \
+	net-tools 
 
 
 WORKDIR /home/$USERNAME
