@@ -1,6 +1,6 @@
 # This is an auto generated Dockerfile for ros:ros-base
 # generated from docker_images_ros2/create_ros_image.Dockerfile.em
-FROM ros:foxy-ros-core-focal
+FROM ubuntu:latest
 
 ARG BRANCH=iceoryx
 ARG USERNAME=user
