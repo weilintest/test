@@ -30,9 +30,9 @@ jobs:
           DOCKER_IMAGE=${DOCKER_REPO}
 
           VERSION=edge
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${GITHUB_REF#refs/tags/v}
-          fi
+          #if [[ $GITHUB_REF == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+          #fi
           if [ "${{ github.event_name }}" = "schedule" ]; then
             VERSION=nightly
           fi
@@ -55,6 +55,8 @@ jobs:
             --build-arg DOCKER_TAG=${DOCKER_TAG} \
             --build-arg IMAGE_NAME=${IMAGE_NAME} \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
+            --build-arg GITHUBTAG=${GITHUB_REF#refs/tags/v} \
+            --build-arg GITHUB_REF=${GITHUB_REF} \
             ${TAGS} --file ./Dockerfile .
       -
         name: Set up Docker Buildx
