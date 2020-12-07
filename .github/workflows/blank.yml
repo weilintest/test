@@ -2,9 +2,11 @@ name: buildx
 
 on:
   pull_request:
-    branches: mon
+    branches: t
   push:
-    branches: mon
+    branches: t
+    tags:
+      - v*
 
 jobs:
   buildx:
@@ -13,18 +15,6 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Set up Docker Buildx
-        uses: crazy-max/ghaction-docker-buildx@v3
-      -
-        name: Cache Docker layers
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
       -
         name: Prepare
         id: prepare
@@ -37,9 +27,9 @@ jobs:
           DOCKERFILE_PATH=./Dockerfile
           DOCKER_TAG=lin
           IMAGE_NAME=${DOCKER_REPO}:${DOCKER_TAG}
+          DOCKER_IMAGE=${DOCKER_REPO}
 
           VERSION=edge
-
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
           fi
@@ -47,39 +37,39 @@ jobs:
             VERSION=nightly
           fi
 
-          TAGS="--tag ${DOCKER_REPO}:${VERSION}"
+          TAGS="--tag ${DOCKER_IMAGE}:${VERSION}"
           if [[ $VERSION =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-            TAGS="$TAGS --tag ${DOCKER_REPO}:latest"
+            TAGS="$TAGS --tag ${DOCKER_IMAGE}:latest"
           fi
 
-          echo ::set-output name=docker_image::${DOCKER_REPO}
+          echo ::set-output name=docker_image::${DOCKER_IMAGE}
           echo ::set-output name=version::${VERSION}
           echo ::set-output name=buildx_args::--platform ${DOCKER_PLATFORMS} \
             --build-arg VERSION=${VERSION} \
             --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+            --build-arg VCS_REF=${GITHUB_SHA::8} \
+            ${TAGS} --file ./test/Dockerfile ./test
       -
-        name: Echo
-        id: echo
+        name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v3
+      -
+        name: Docker Buildx (build)
         run: |
-          echo ${IMAGE_NAME}
-          echo ${DOCKER_PLATFORMS}
-
+          docker buildx build --output "type=image,push=false" ${{ steps.prepare.outputs.buildx_args }}
       -
         name: Login to DockerHub
+        if: success() && github.event_name != 'pull_request'
         uses: docker/login-action@v1
         with:
           username: betsyweilin
           password: 88weilinlin
       -
         name: Docker Buildx (push)
+        if: success() && github.event_name != 'pull_request'
         run: |
-          docker buildx build \
-            --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform  linux/amd64,linux/arm64 \
-            --output "type=image,push=true" \
-            --tag betsyweilin/get-started:test1 \
-            --file ./Dockerfile ./
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }}
       -
         name: Inspect image
+        if: always() && github.event_name != 'pull_request'
         run: |
-          docker buildx imagetools inspect betsyweilin/get-started:test
+          docker buildx imagetools inspect ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
