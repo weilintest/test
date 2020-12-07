@@ -50,7 +50,7 @@ jobs:
             --cache-from "type=local,src=/tmp/.buildx-cache" \
             --platform  ${DOCKER_PLATFORMS} \
             --output "type=image,push=true" \
-            --tag ${IMAGE_NAME}:${DOCKER_TAG} \
+            --tag betsyweilin/get-started:test1 \
             --file ./Dockerfile ./
       -
         name: Inspect image
