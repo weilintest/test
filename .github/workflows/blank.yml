@@ -48,7 +48,7 @@ jobs:
         run: |
           docker buildx build \
             --cache-from "type=local,src=/tmp/.buildx-cache" \
-            --platform  ${DOCKER_PLATFORMS} \
+            --platform  linux/amd64,linux/arm64 \
             --output "type=image,push=true" \
             --tag betsyweilin/get-started:test1 \
             --file ./Dockerfile ./
