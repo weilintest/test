@@ -55,7 +55,7 @@ jobs:
             --build-arg DOCKER_TAG=${DOCKER_TAG} \
             --build-arg IMAGE_NAME=${IMAGE_NAME} \
             --build-arg VCS_REF=${GITHUB_SHA::8} \
-            ${TAGS} --file ./test/Dockerfile ./test
+            ${TAGS} --file ./Dockerfile .
       -
         name: Set up Docker Buildx
         uses: crazy-max/ghaction-docker-buildx@v3
