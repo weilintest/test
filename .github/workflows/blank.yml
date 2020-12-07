@@ -2,9 +2,9 @@ name: buildx
 
 on:
   pull_request:
-    branches: t
+    branches: mine
   push:
-    branches: t
+    branches: mine
     tags:
       - v*
 
