@@ -20,12 +20,12 @@ jobs:
         id: prepare
         run: |
           DOCKER_PLATFORMS=linux/amd64,linux/arm64
-          SOURCE_BRANCH=mon
-          SOURCE_COMMIT=
+          SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
+          SOURCE_COMMIT=$(git rev-parse --short HEAD)
           COMMIT_MSG=
           DOCKER_REPO=betsyweilin/get-started
           DOCKERFILE_PATH=./Dockerfile
-          DOCKER_TAG=lin
+          DOCKER_TAG=${GITHUB_REF#refs/heads/}
           IMAGE_NAME=${DOCKER_REPO}:${DOCKER_TAG}
           DOCKER_IMAGE=${DOCKER_REPO}
 
