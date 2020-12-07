@@ -2,9 +2,9 @@ name: buildx
 
 on:
   pull_request:
-    branches: test
+    branches: mon
   push:
-    branches: test
+    branches: mon
 
 jobs:
   buildx:
