@@ -29,10 +29,10 @@ jobs:
           IMAGE_NAME=${DOCKER_REPO}:${DOCKER_TAG}
           DOCKER_IMAGE=${DOCKER_REPO}
 
-          VERSION=edge
-          #if [[ $GITHUB_REF == refs/tags/* ]]; then
-          VERSION=${git describe --tags --abbrev=0}
-          #fi
+          VERSION=latest
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${git describe --tags --abbrev=0}
+          fi
           if [ "${{ github.event_name }}" = "schedule" ]; then
             VERSION=nightly
           fi
