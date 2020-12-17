@@ -31,7 +31,7 @@ jobs:
 
           VERSION=latest
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            VERSION=${git describe --tags --abbrev=0}
+            VERSION=$(git describe --tags --abbrev=0)
           fi
           if [ "${{ github.event_name }}" = "schedule" ]; then
             VERSION=nightly
